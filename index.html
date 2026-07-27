@@ -109,18 +109,70 @@ html,body{min-height:100%;font-family:'Noto Sans SC',-apple-system,sans-serif;co
 .word-card .phonetic{font-size:12px;color:var(--brown-2);margin-bottom:6px}
 .word-card .meaning{font-size:13px}
 
-.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.cal-header .month{font-family:'Caveat';font-size:26px;font-weight:700;color:var(--brown)}
-.cal-header button{background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:5px 11px;cursor:pointer;font-size:13px;color:var(--brown)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.cal-week{text-align:center;font-size:11px;color:var(--brown-2);padding:3px 0;font-weight:600}
-.cal-day{min-height:80px;background:var(--paper);border:1px solid var(--line);border-radius:7px;padding:5px;font-size:11px;position:relative;overflow-y:auto}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-header .month{font-family:'Caveat';font-size:22px;font-weight:700;color:var(--brown)}
+.cal-header button{background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px;color:var(--brown)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-week{text-align:center;font-size:10px;color:var(--brown-2);padding:3px 0;font-weight:600}
+.cal-day{min-height:64px;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:4px;font-size:10px;position:relative;overflow-y:auto;cursor:pointer}
 .cal-day.other{opacity:.3}
-.cal-day.today{border-color:var(--accent);border-width:2px}
-.cal-day .num{font-weight:700;color:var(--brown);margin-bottom:3px}
-.cal-task{background:var(--cream);border-radius:4px;padding:2px 5px;margin-bottom:2px;font-size:9px;display:flex;align-items:center;gap:2px;cursor:pointer;line-height:1.3}
-.cal-task.done{opacity:.5;text-decoration:line-through}
-.cal-add{font-size:13px;color:var(--accent);cursor:pointer;text-align:center;padding:1px}
+.cal-day.today{border-color:var(--accent);border-width:2px;background:var(--cream)}
+.cal-day.selected{border-color:var(--accent);background:var(--cream)}
+.cal-day .num{font-weight:700;color:var(--brown);margin-bottom:2px}
+.cal-task{background:rgba(217,140,107,.18);border-radius:3px;padding:1px 4px;margin-bottom:1px;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ===== 计划页新样式 ===== */
+.plan-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
+.plan-label{font-family:'Caveat';font-size:32px;font-weight:700;color:var(--brown);line-height:1}
+.plan-date{font-size:12px;color:var(--brown-2);margin-top:4px}
+.plan-view-tabs{display:flex;gap:6px;background:var(--cream);padding:4px;border-radius:10px}
+.plan-tab{padding:5px 14px;border-radius:8px;font-size:13px;font-weight:600;color:var(--brown-2);cursor:pointer}
+.plan-tab.active{background:var(--accent);color:#fff}
+
+.day-strip{display:flex;gap:8px;overflow-x:auto;padding:6px 0 14px;margin-bottom:8px;scrollbar-width:none}
+.day-strip::-webkit-scrollbar{display:none}
+.day-item{flex-shrink:0;width:54px;height:72px;background:var(--paper);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.day-item.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.day-item.active .day-week,.day-item.active .day-num{color:#fff}
+.day-week{font-size:11px;color:var(--brown-2);margin-bottom:3px}
+.day-num{font-size:20px;font-weight:700;color:var(--brown)}
+.day-dot{width:5px;height:5px;background:var(--accent);border-radius:50%;position:absolute;bottom:8px}
+
+.task-list-card{background:var(--paper);border-radius:14px;padding:14px;box-shadow:0 3px 14px rgba(107,79,58,.07);border:1px solid var(--line);min-height:300px}
+.task-empty{text-align:center;color:var(--brown-2);padding:60px 20px;font-size:14px;line-height:1.8}
+.task-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.task-item:last-child{border-bottom:none}
+.task-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:#fff;flex-shrink:0}
+.task-check.done{background:var(--accent);color:#fff}
+.task-body{flex:1}
+.task-text{font-size:14px;color:var(--ink);font-weight:500}
+.task-text.done{text-decoration:line-through;opacity:.5}
+.task-meta{font-size:10px;color:var(--brown-2);margin-top:2px}
+.task-del{color:var(--brown-2);font-size:13px;cursor:pointer;opacity:.5}
+.task-del:hover{opacity:1;color:var(--red)}
+
+.fab{position:fixed;right:20px;bottom:30px;width:52px;height:52px;border-radius:50%;background:var(--accent);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(217,140,107,.4);z-index:40}
+.fab:active{background:var(--brown)}
+
+.month-view{display:none}
+.month-view.show{display:block}
+
+/* 弹窗 */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:80;opacity:0;pointer-events:none;transition:.25s}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal{position:fixed;left:50%;top:45%;transform:translate(-50%,-50%) scale(.95);width:min(340px,90%);background:var(--paper);border-radius:16px;padding:16px;z-index:90;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 10px 40px rgba(0,0,0,.15)}
+.modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.modal-header h3{font-size:16px;color:var(--brown)}
+.modal-close{width:28px;height:28px;border-radius:7px;background:var(--cream);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--brown)}
+.modal-body input,.modal-body select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin-bottom:12px;font-family:inherit;font-size:13px;outline:none}
+.modal-body input:focus,.modal-body select:focus{border-color:var(--accent)}
+.modal-row{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.modal-row label{font-size:12px;color:var(--brown-2);white-space:nowrap;width:60px}
+.modal-row input,.modal-row select{flex:1;margin-bottom:0}
+.modal-footer{text-align:right;margin-top:14px}
+.modal-footer button{background:var(--accent);color:#fff;border:none;padding:9px 24px;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px}
+
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--brown);color:#fff;padding:9px 18px;border-radius:22px;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:99}
 .toast.show{opacity:1}
 </style>
@@ -242,9 +294,29 @@ html,body{min-height:100%;font-family:'Noto Sans SC',-apple-system,sans-serif;co
   </div>
 
   <div class="page" id="page-plan">
-    <div class="page-title">Plan & Calendar</div>
-    <div class="page-sub">点击日期添加计划，完成打勾✅</div>
-    <div class="card">
+    <div class="plan-header">
+      <div class="plan-title">
+        <div class="plan-label">今天</div>
+        <div class="plan-date" id="planToday">7月27日 周一</div>
+      </div>
+      <div class="plan-view-tabs">
+        <div class="plan-tab active" data-view="day">日</div>
+        <div class="plan-tab" data-view="week">周</div>
+        <div class="plan-tab" data-view="month">月</div>
+      </div>
+    </div>
+
+    <!-- 日期选择条 -->
+    <div class="day-strip" id="dayStrip"></div>
+
+    <!-- 任务列表 -->
+    <div class="task-list-card" id="taskListCard">
+      <div class="task-empty" id="taskEmpty">暂无任务…<br>点击右下角 + 创建</div>
+      <div id="taskList"></div>
+    </div>
+
+    <!-- 月视图 -->
+    <div class="month-view" id="monthView" style="display:none">
       <div class="cal-header">
         <button id="prevMonth">‹ 上月</button>
         <div class="month" id="calMonth">2026年7月</div>
@@ -254,6 +326,38 @@ html,body{min-height:100%;font-family:'Noto Sans SC',-apple-system,sans-serif;co
         <div class="cal-week">一</div><div class="cal-week">二</div><div class="cal-week">三</div><div class="cal-week">四</div><div class="cal-week">五</div><div class="cal-week">六</div><div class="cal-week">日</div>
       </div>
       <div class="cal-grid" id="calGrid" style="margin-top:5px"></div>
+    </div>
+
+    <!-- 添加按钮 -->
+    <div class="fab" id="fab">+</div>
+  </div>
+
+  <!-- 添加任务弹窗 -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal" id="taskModal">
+    <div class="modal-header">
+      <h3>添加计划</h3>
+      <div class="modal-close" id="modalClose">✕</div>
+    </div>
+    <div class="modal-body">
+      <input type="text" id="taskInput" placeholder="例如：每天背单词30分钟">
+      <div class="modal-row">
+        <label>开始日期</label>
+        <input type="date" id="taskDate">
+      </div>
+      <div class="modal-row">
+        <label>重复频率</label>
+        <select id="taskFreq">
+          <option value="once">不重复</option>
+          <option value="daily">每天</option>
+          <option value="weekdays">工作日（周一到周五）</option>
+          <option value="weekly">每周</option>
+          <option value="monthly">每月</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button id="taskSave">保存</button>
     </div>
   </div>
 
@@ -334,12 +438,81 @@ showWord();
 $('#nextWord').onclick=showWord;
 $$('.eng-card').forEach(c=>c.onclick=e=>{e.preventDefault();$('#engFrame').src=c.dataset.url;});
 
-// 日历
+// 日历/计划
 const PLAN_KEY='workbench_pro_plans';
-let plans={};try{plans=JSON.parse(localStorage.getItem(PLAN_KEY))||{};}catch{}
-function savePlans(){localStorage.setItem(PLAN_KEY,JSON.stringify(plans));}
+let tasks=[];try{tasks=JSON.parse(localStorage.getItem(PLAN_KEY))||[];}catch{}
+function saveTasks(){localStorage.setItem(PLAN_KEY,JSON.stringify(tasks));}
+let planView='day';
+let planSelected=new Date();
 let calDate=new Date(now.getFullYear(),now.getMonth(),1);
-function renderCal(){
+
+function fmt(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function parseDate(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
+function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
+function weekDay(d){return d.getDay()===0?7:d.getDay();}
+
+// 判断任务 t 是否出现在日期 d
+function taskOnDate(t,d){
+  const start=parseDate(t.startDate);
+  if(d<start.setHours(0,0,0,0)) return false;
+  const dw=weekDay(d);
+  switch(t.freq){
+    case 'once': return sameDay(start,d);
+    case 'daily': return true;
+    case 'weekdays': return dw>=1&&dw<=5;
+    case 'weekly': return weekDay(start)===dw;
+    case 'monthly': return start.getDate()===d.getDate();
+  }
+  return false;
+}
+function isDone(t,d){return t.completed && t.completed.includes(fmt(d));}
+function toggleDone(t,d){const k=fmt(d);if(!t.completed)t.completed=[];const idx=t.completed.indexOf(k);if(idx>=0)t.completed.splice(idx,1);else t.completed.push(k);}
+
+function renderDayStrip(){
+  const strip=$('#dayStrip');strip.innerHTML='';
+  for(let i=-3;i<=10;i++){
+    const d=new Date(planSelected);d.setDate(d.getDate()+i);
+    const item=document.createElement('div');
+    item.className='day-item'+(sameDay(d,planSelected)?' active':'');
+    item.innerHTML=`<div class="day-week">${['日','一','二','三','四','五','六'][d.getDay()]}</div><div class="day-num">${d.getDate()}</div>${hasTask(d)?'<div class="day-dot"></div>':''}`;
+    item.onclick=()=>{planSelected=d;renderPlan();};
+    strip.appendChild(item);
+  }
+  // 滚动到选中
+  setTimeout(()=>{const active=strip.querySelector('.day-item.active');if(active)active.scrollIntoView({inline:'center',behavior:'smooth'});},50);
+}
+function hasTask(d){return tasks.some(t=>taskOnDate(t,d));}
+
+function renderTaskList(){
+  const list=$('#taskList');const empty=$('#taskEmpty');
+  const todayTasks=tasks.map(t=>{const on=taskOnDate(t,planSelected);return on?{t,on}:null;}).filter(x=>x);
+  if(!todayTasks.length){list.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  list.innerHTML=todayTasks.map(({t})=>`<div class="task-item"><div class="task-check ${isDone(t,planSelected)?'done':''}" data-id="${t.id}" data-date="${fmt(planSelected)}">${isDone(t,planSelected)?'✓':''}</div><div class="task-body"><div class="task-text ${isDone(t,planSelected)?'done':''}">${t.text}</div><div class="task-meta">${freqName(t.freq)} · 从 ${t.startDate} 开始</div></div><div class="task-del" data-id="${t.id}">✕</div></div>`).join('');
+  $$('.task-check').forEach(el=>el.onclick=()=>{const t=tasks.find(x=>x.id===el.dataset.id);if(!t)return;toggleDone(t,parseDate(el.dataset.date));saveTasks();renderPlan();});
+  $$('.task-del').forEach(el=>el.onclick=()=>{if(!confirm('确定删除这个计划？'))return;tasks=tasks.filter(x=>x.id!==el.dataset.id);saveTasks();renderPlan();toast('已删除');});
+}
+function freqName(f){return {once:'不重复',daily:'每天',weekdays:'工作日',weekly:'每周',monthly:'每月'}[f]||f;}
+
+function renderWeekView(){
+  const container=$('#taskList');const empty=$('#taskEmpty');
+  const start=new Date(planSelected);start.setDate(start.getDate()-(weekDay(planSelected)-1));
+  let html='';
+  for(let i=0;i<7;i++){
+    const d=new Date(start);d.setDate(d.getDate()+i);
+    const dayTasks=tasks.filter(t=>taskOnDate(t,d));
+    html+=`<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--brown-2);margin-bottom:6px;font-weight:600">${d.getMonth()+1}/${d.getDate()} 周${['日','一','二','三','四','五','六'][d.getDay()]}</div>`;
+    if(!dayTasks.length){html+=`<div style="font-size:12px;color:var(--brown-2);padding:4px 0">无任务</div>`;}
+    else{
+      html+=dayTasks.map(t=>`<div class="task-item" style="padding:8px 0"><div class="task-check ${isDone(t,d)?'done':''}" data-id="${t.id}" data-date="${fmt(d)}">${isDone(t,d)?'✓':''}</div><div class="task-body"><div class="task-text ${isDone(t,d)?'done':''}">${t.text}</div></div></div>`).join('');
+    }
+    html+='</div>';
+  }
+  empty.style.display='none';container.innerHTML=html;
+  $$('.task-check').forEach(el=>el.onclick=()=>{const t=tasks.find(x=>x.id===el.dataset.id);if(!t)return;toggleDone(t,parseDate(el.dataset.date));saveTasks();renderPlan();});
+}
+
+function renderMonthView(){
   const y=calDate.getFullYear(),m=calDate.getMonth();
   $('#calMonth').textContent=`${y}年${m+1}月`;
   const first=new Date(y,m,1);let startDay=first.getDay();if(startDay===0)startDay=7;startDay--;
@@ -350,19 +523,52 @@ function renderCal(){
   const today=new Date();
   for(let d=1;d<=daysInMonth;d++){
     const dateKey=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday=d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
-    let tasksHtml='';
-    if(plans[dateKey])tasksHtml=plans[dateKey].map((t,i)=>`<div class="cal-task ${t.done?'done':''}" data-date="${dateKey}" data-i="${i}"><span>${t.done?'✅':'⬜'}</span>${t.text}</div>`).join('');
-    grid.innerHTML+=`<div class="cal-day ${isToday?'today':''}"><div class="num">${d}</div>${tasksHtml}<div class="cal-add" data-date="${dateKey}">+</div></div>`;
+    const dt=new Date(y,m,d);
+    const isToday=sameDay(dt,today);
+    const isSelected=sameDay(dt,planSelected);
+    const dayTasks=tasks.filter(t=>taskOnDate(t,dt));
+    const tasksHtml=dayTasks.map(t=>`<div class="cal-task ${isDone(t,dt)?'done':''}">${t.text}</div>`).join('');
+    grid.innerHTML+=`<div class="cal-day ${isToday?'today':''} ${isSelected?'selected':''}" data-date="${dateKey}"><div class="num">${d}</div>${tasksHtml}</div>`;
   }
   const total=startDay+daysInMonth;const remain=(7-total%7)%7;
   for(let i=1;i<=remain;i++)grid.innerHTML+=`<div class="cal-day other"><div class="num">${i}</div></div>`;
-  $$('.cal-add').forEach(el=>el.onclick=()=>{const dk=el.dataset.date;const text=prompt('添加计划：');if(!text)return;if(!plans[dk])plans[dk]=[];plans[dk].push({text,done:false});savePlans();renderCal();toast('已添加');});
-  $$('.cal-task').forEach(el=>el.onclick=()=>{const dk=el.dataset.date,i=+el.dataset.i;plans[dk][i].done=!plans[dk][i].done;savePlans();renderCal();});
+  $$('.cal-day[data-date]').forEach(el=>el.onclick=()=>{planSelected=parseDate(el.dataset.date);planView='day';renderPlan();});
 }
-$('#prevMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()-1);renderCal();};
-$('#nextMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderCal();};
-renderCal();
+
+function renderPlan(){
+  const today=new Date();
+  $('#planToday').textContent=`${planSelected.getMonth()+1}月${planSelected.getDate()}日 周${['日','一','二','三','四','五','六'][planSelected.getDay()]}`;
+  $('#taskListCard').style.display=planView==='month'?'none':'block';
+  $('#monthView').style.display=planView==='month'?'block':'none';
+  $('#dayStrip').style.display=planView==='day'?'flex':'none';
+  $$('.plan-tab').forEach(t=>t.classList.toggle('active',t.dataset.view===planView));
+  if(planView==='day'){renderDayStrip();renderTaskList();}
+  else if(planView==='week'){renderWeekView();}
+  else if(planView==='month'){renderMonthView();}
+}
+
+$$('.plan-tab').forEach(t=>t.onclick=()=>{planView=t.dataset.view;renderPlan();});
+$('#prevMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()-1);renderPlan();};
+$('#nextMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderPlan();};
+
+// 弹窗
+function openModal(){$('#modalOverlay').classList.add('show');$('#taskModal').classList.add('show');$('#taskInput').focus();}
+function closeModal(){$('#modalOverlay').classList.remove('show');$('#taskModal').classList.remove('show');$('#taskInput').value='';}
+$('#fab').onclick=openModal;
+$('#modalOverlay').onclick=closeModal;
+$('#modalClose').onclick=closeModal;
+$('#taskDate').value=fmt(planSelected);
+$('#taskSave').onclick=()=>{
+  const text=$('#taskInput').value.trim();
+  const date=$('#taskDate').value;
+  const freq=$('#taskFreq').value;
+  if(!text){toast('请输入计划内容');return;}
+  if(!date){toast('请选择日期');return;}
+  tasks.push({id:Date.now().toString(),text,startDate:date,freq,completed:[]});
+  saveTasks();closeModal();renderPlan();toast('已添加');
+};
+
+renderPlan();
 </script>
 </body>
 </html>
