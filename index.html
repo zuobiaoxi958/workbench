@@ -11,306 +11,283 @@
   --brown:#6B4F3A;--brown-2:#A88566;--accent:#D98C6B;--accent-2:#E3B89A;
   --green:#7A9A6E;--red:#C76B5B;--yellow:#E8B84B;--blue:#6B8DB5;
   --ink:#3D2E22;--line:rgba(107,79,58,.15);
-  --sidebar-w:200px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;font-family:'Noto Sans SC',-apple-system,sans-serif;color:var(--ink);font-size:14px;overflow:hidden}
-body{background:var(--bg)}
+html,body{min-height:100%;font-family:'Noto Sans SC',-apple-system,sans-serif;color:var(--ink);font-size:14px;background:var(--bg)}
 
-/* ===== 整体布局 ===== */
-.app{display:flex;height:100vh}
-.sidebar{
-  width:var(--sidebar-w);background:var(--paper);border-right:1px solid var(--line);
-  display:flex;flex-direction:column;padding:18px 0;flex-shrink:0;overflow-y:auto;
-}
-.sidebar .logo{font-family:'Caveat';font-size:26px;font-weight:700;color:var(--brown);text-align:center;padding:8px 0 16px;border-bottom:1px dashed var(--line);margin-bottom:12px}
-.nav-item{
-  display:flex;align-items:center;gap:10px;padding:11px 20px;cursor:pointer;
-  color:var(--brown-2);font-size:14px;font-weight:500;transition:.15s;border-left:3px solid transparent;
-}
+.topbar{position:fixed;top:0;left:0;right:0;height:54px;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:50;box-shadow:0 2px 10px rgba(107,79,58,.06)}
+.topbar .left{display:flex;align-items:center;gap:10px}
+.menu-btn{width:36px;height:36px;border-radius:9px;background:var(--cream);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--brown)}
+.menu-btn:active{background:var(--accent-2)}
+.topbar .title{font-family:'Caveat';font-size:21px;font-weight:700;color:var(--brown)}
+.topbar .date{font-size:11px;color:var(--brown-2)}
+
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:60;opacity:0;pointer-events:none;transition:.25s}
+.sidebar-overlay.show{opacity:1;pointer-events:auto}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:250px;background:var(--paper);z-index:70;transform:translateX(-100%);transition:.25s;box-shadow:4px 0 20px rgba(0,0,0,.12);display:flex;flex-direction:column;overflow-y:auto}
+.sidebar.show{transform:translateX(0)}
+.sidebar-header{padding:22px 18px;border-bottom:1px dashed var(--line);position:relative}
+.sidebar-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:7px;background:var(--cream);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--brown)}
+.sidebar-avatar{width:52px;height:52px;border-radius:50%;background:var(--cream);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--brown);margin-bottom:8px}
+.sidebar-name{font-size:15px;font-weight:700;color:var(--brown);margin-bottom:2px}
+.sidebar-meta{font-size:11px;color:var(--brown-2)}
+.nav-item{display:flex;align-items:center;gap:11px;padding:12px 18px;cursor:pointer;color:var(--brown-2);font-size:14px;font-weight:500;transition:.15s;border-left:3px solid transparent}
 .nav-item:hover{background:var(--cream);color:var(--brown)}
 .nav-item.active{background:var(--cream);color:var(--accent);border-left-color:var(--accent);font-weight:700}
-.nav-item .icon{font-size:18px;width:22px;text-align:center}
-.sidebar .footer{margin-top:auto;padding:12px 20px;font-size:11px;color:var(--brown-2);border-top:1px dashed var(--line)}
+.nav-item .icon{font-size:19px;width:22px;text-align:center}
+.sidebar-footer{margin-top:auto;padding:12px 18px;font-size:11px;color:var(--brown-2);border-top:1px dashed var(--line)}
 
-.main{flex:1;overflow-y:auto;padding:20px 24px}
-.page{display:none;animation:fade .3s}
+.main{padding:66px 14px 26px;max-width:760px;margin:0 auto}
+.page{display:none;animation:fade .25s}
 .page.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.page-title{font-family:'Caveat';font-size:32px;font-weight:700;color:var(--brown);margin-bottom:4px}
-.page-sub{font-size:13px;color:var(--brown-2);margin-bottom:18px}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.page-title{font-family:'Caveat';font-size:28px;font-weight:700;color:var(--brown);margin-bottom:3px}
+.page-sub{font-size:12px;color:var(--brown-2);margin-bottom:14px}
 
-/* ===== 卡片 ===== */
-.card{background:var(--paper);border-radius:14px;padding:18px;box-shadow:0 4px 16px rgba(107,79,58,.08);border:1px solid var(--line);margin-bottom:16px}
-.card h3{font-size:15px;font-weight:700;color:var(--brown);margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-@media(max-width:700px){.grid2,.grid3{grid-template-columns:1fr}}
+.card{background:var(--paper);border-radius:13px;padding:15px;box-shadow:0 3px 14px rgba(107,79,58,.07);border:1px solid var(--line);margin-bottom:13px}
+.card h3{font-size:14px;font-weight:700;color:var(--brown);margin-bottom:11px;display:flex;align-items:center;gap:5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:520px){.grid2,.grid3{grid-template-columns:1fr}}
 
-/* ===== 记账 ===== */
-.stat-box{background:linear-gradient(135deg,var(--cream),var(--paper));border-radius:12px;padding:14px;text-align:center;border:1px solid var(--line)}
-.stat-box .label{font-size:11px;color:var(--brown-2);margin-bottom:4px}
-.stat-box .val{font-family:'Caveat';font-size:28px;font-weight:700}
+.stat-box{background:linear-gradient(135deg,var(--cream),var(--paper));border-radius:11px;padding:12px 6px;text-align:center;border:1px solid var(--line)}
+.stat-box .label{font-size:10px;color:var(--brown-2);margin-bottom:3px}
+.stat-box .val{font-family:'Caveat';font-size:24px;font-weight:700}
 .stat-box.income .val{color:var(--green)}
 .stat-box.expense .val{color:var(--red)}
 .stat-box.balance .val{color:var(--accent)}
-.entry-row{display:grid;grid-template-columns:70px 1fr 1fr auto;gap:8px;margin-bottom:10px}
-.entry-row select,.entry-row input,.entry-row button{font-family:inherit;font-size:13px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;outline:none}
+
+.entry-row{display:grid;grid-template-columns:65px 1fr 1fr auto;gap:7px;margin-bottom:9px}
+.entry-row select,.entry-row input,.entry-row button{font-family:inherit;font-size:13px;padding:8px 9px;border:1px solid var(--line);border-radius:8px;background:#fff;outline:none;color:var(--ink)}
 .entry-row input:focus,.entry-row select:focus{border-color:var(--accent)}
-.entry-row button{background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:600;padding:9px 16px}
-.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.cat-chips .chip{font-size:12px;padding:4px 10px;border-radius:12px;background:var(--cream);color:var(--brown);cursor:pointer;border:1px solid transparent}
+.entry-row button{background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:600;padding:8px 13px}
+.cat-chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px}
+.cat-chips .chip{font-size:11px;padding:4px 9px;border-radius:11px;background:var(--cream);color:var(--brown);cursor:pointer;border:1px solid transparent}
 .cat-chips .chip.active{background:var(--accent);color:#fff}
-.record-list{max-height:240px;overflow-y:auto}
-.record{display:grid;grid-template-columns:28px 1fr auto auto;gap:8px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13px}
-.record .emoji{font-size:16px;text-align:center}
-.record .amt{font-family:'Caveat';font-size:16px;font-weight:700}
+.record-list{max-height:220px;overflow-y:auto}
+.record{display:grid;grid-template-columns:24px 1fr auto auto;gap:7px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line);font-size:12px}
+.record .emoji{font-size:15px;text-align:center}
+.record .amt{font-family:'Caveat';font-size:15px;font-weight:700}
 .record .amt.exp{color:var(--red)}
 .record .amt.inc{color:var(--green)}
-.record .del{cursor:pointer;opacity:.4;font-size:13px}
-.record .del:hover{opacity:1;color:var(--red)}
-.cat-bar{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
-.cat-bar .bar{flex:1;height:7px;background:var(--cream);border-radius:4px;overflow:hidden}
+.record .del{cursor:pointer;opacity:.4;font-size:12px}
+.cat-bar{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:12px}
+.cat-bar .bar{flex:1;height:6px;background:var(--cream);border-radius:3px;overflow:hidden;max-width:100px}
 .cat-bar .bar i{display:block;height:100%;background:var(--accent)}
 
-/* ===== 读书 ===== */
-.book-search{display:flex;gap:8px;margin-bottom:14px}
-.book-search input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:13px;outline:none}
-.book-search input:focus{border-color:var(--accent)}
-.book-search button{padding:10px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600}
-.book-sites{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
-.book-site{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;background:var(--cream);text-decoration:none;color:var(--ink);font-size:13px;border:1px solid transparent;cursor:pointer}
+.book-search{display:flex;gap:7px;margin-bottom:11px}
+.book-search input{flex:1;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:13px;outline:none}
+.book-search button{padding:9px 15px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600}
+.book-sites{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:11px}
+.book-site{display:flex;align-items:center;gap:9px;padding:10px;border-radius:10px;background:var(--cream);text-decoration:none;color:var(--ink);font-size:12px;border:1px solid transparent;cursor:pointer}
 .book-site:hover{border-color:var(--accent)}
-.book-site .logo{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0}
-.book-site .info b{display:block;font-size:13px}
-.book-site .info small{color:var(--brown-2);font-size:11px}
-.book-frame{width:100%;height:480px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.book-tip{font-size:12px;color:var(--brown-2);text-align:center;margin-top:8px;font-family:'Caveat';font-size:14px}
+.book-site .logo{width:27px;height:27px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0}
+.book-site .info b{display:block;font-size:12px}
+.book-site .info small{color:var(--brown-2);font-size:10px}
+.book-frame{width:100%;height:400px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.book-tip{font-size:11px;color:var(--brown-2);text-align:center;margin-top:6px;font-family:'Caveat';font-size:13px}
 
-/* ===== 热点 ===== */
-.hot-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.hot-tabs .tab{font-size:12px;padding:6px 12px;border-radius:12px;background:var(--cream);color:var(--brown);cursor:pointer;border:1px solid transparent}
+.hot-tabs{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.hot-tabs .tab{font-size:12px;padding:5px 11px;border-radius:12px;background:var(--cream);color:var(--brown);cursor:pointer;border:1px solid transparent}
 .hot-tabs .tab.active{background:var(--accent);color:#fff}
 .hot-list{max-height:440px;overflow-y:auto}
-.hot-item{display:block;padding:10px 12px;border-radius:8px;text-decoration:none;color:var(--ink);border:1px solid transparent;margin-bottom:5px;background:var(--cream)}
+.hot-item{display:block;padding:10px;border-radius:9px;text-decoration:none;color:var(--ink);border:1px solid transparent;margin-bottom:5px;background:var(--cream)}
 .hot-item:hover{border-color:var(--accent-2)}
 .hot-item .ht{font-size:13px;font-weight:500}
 .hot-item .hm{font-size:10px;color:var(--brown-2);margin-top:2px}
 .hot-item .badge{background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:4px;margin-left:4px}
 
-/* ===== 英语 ===== */
-.eng-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.eng-card{background:var(--cream);border-radius:12px;padding:14px;text-decoration:none;color:var(--ink)}
-.eng-card .et{font-size:14px;font-weight:700;margin-bottom:4px}
-.eng-card .ed{font-size:11px;color:var(--brown-2)}
-.eng-card .emoji{font-size:24px;margin-bottom:6px;display:block}
-.eng-frame{width:100%;height:480px;border:1px solid var(--line);border-radius:10px;background:#fff;margin-top:12px}
-.word-card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;margin-bottom:12px}
-.word-card .word{font-size:22px;font-weight:700;color:var(--brown);margin-bottom:4px}
-.word-card .phonetic{font-size:13px;color:var(--brown-2);margin-bottom:8px}
-.word-card .meaning{font-size:14px;color:var(--ink)}
+.eng-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.eng-card{background:var(--cream);border-radius:11px;padding:13px;text-decoration:none;color:var(--ink);border:1px solid transparent;cursor:pointer}
+.eng-card:hover{border-color:var(--accent)}
+.eng-card .emoji{font-size:22px;margin-bottom:5px;display:block}
+.eng-card .et{font-size:13px;font-weight:700;margin-bottom:3px}
+.eng-card .ed{font-size:10px;color:var(--brown-2)}
+.eng-frame{width:100%;height:400px;border:1px solid var(--line);border-radius:10px;background:#fff;margin-top:10px}
+.word-card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:15px;text-align:center;margin-bottom:10px}
+.word-card .word{font-size:21px;font-weight:700;color:var(--brown);margin-bottom:3px}
+.word-card .phonetic{font-size:12px;color:var(--brown-2);margin-bottom:6px}
+.word-card .meaning{font-size:13px}
 
-/* ===== 计划日历 ===== */
-.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.cal-header .month{font-family:'Caveat';font-size:28px;font-weight:700;color:var(--brown)}
-.cal-header button{background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:14px;color:var(--brown)}
-.cal-header button:hover{background:var(--accent-2)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.cal-week{text-align:center;font-size:11px;color:var(--brown-2);padding:4px 0;font-weight:600}
-.cal-day{min-height:90px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:6px;font-size:12px;position:relative;overflow-y:auto}
-.cal-day.other{opacity:.35}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-header .month{font-family:'Caveat';font-size:26px;font-weight:700;color:var(--brown)}
+.cal-header button{background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:5px 11px;cursor:pointer;font-size:13px;color:var(--brown)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal-week{text-align:center;font-size:11px;color:var(--brown-2);padding:3px 0;font-weight:600}
+.cal-day{min-height:80px;background:var(--paper);border:1px solid var(--line);border-radius:7px;padding:5px;font-size:11px;position:relative;overflow-y:auto}
+.cal-day.other{opacity:.3}
 .cal-day.today{border-color:var(--accent);border-width:2px}
-.cal-day .num{font-weight:700;color:var(--brown);margin-bottom:4px}
-.cal-task{background:var(--cream);border-radius:4px;padding:3px 6px;margin-bottom:3px;font-size:10px;display:flex;align-items:center;gap:3px;cursor:pointer}
+.cal-day .num{font-weight:700;color:var(--brown);margin-bottom:3px}
+.cal-task{background:var(--cream);border-radius:4px;padding:2px 5px;margin-bottom:2px;font-size:9px;display:flex;align-items:center;gap:2px;cursor:pointer;line-height:1.3}
 .cal-task.done{opacity:.5;text-decoration:line-through}
-.cal-task .check{font-size:11px}
-.cal-add{font-size:14px;color:var(--accent);cursor:pointer;text-align:center;padding:2px}
-.cal-add:hover{color:var(--brown)}
+.cal-add{font-size:13px;color:var(--accent);cursor:pointer;text-align:center;padding:1px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--brown);color:#fff;padding:9px 18px;border-radius:22px;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:99}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
-<div class="app">
 
-  <!-- ===== 侧边栏 ===== -->
-  <div class="sidebar">
-    <div class="logo">我的工作台</div>
-    <div class="nav-item active" data-page="money"><span class="icon">📒</span>记账</div>
-    <div class="nav-item" data-page="read"><span class="icon">📚</span>读书</div>
-    <div class="nav-item" data-page="hot"><span class="icon">🔥</span>热点资讯</div>
-    <div class="nav-item" data-page="english"><span class="icon">🔤</span>英语学习</div>
-    <div class="nav-item" data-page="plan"><span class="icon">📅</span>计划日历</div>
-    <div class="footer">~ 慢慢变富日记 ~</div>
+<div class="topbar">
+  <div class="left">
+    <div class="menu-btn" id="menuBtn">☰</div>
+    <div class="title">我的工作台</div>
   </div>
-
-  <!-- ===== 主内容 ===== -->
-  <div class="main">
-
-    <!-- ===== 记账 ===== -->
-    <div class="page active" id="page-money">
-      <div class="page-title">Account Book</div>
-      <div class="page-sub">每一笔都记，就知道钱去哪了</div>
-
-      <div class="grid3" style="margin-bottom:16px">
-        <div class="stat-box income"><div class="label">本月收入</div><div class="val" id="totalIn">¥0</div></div>
-        <div class="stat-box expense"><div class="label">本月支出</div><div class="val" id="totalOut">¥0</div></div>
-        <div class="stat-box balance"><div class="label">结余</div><div class="val" id="balance">¥0</div></div>
-      </div>
-
-      <div class="card">
-        <h3>✏️ 记一笔</h3>
-        <div class="entry-row">
-          <select id="entryType"><option value="expense">支出</option><option value="income">收入</option></select>
-          <input type="number" id="entryAmt" placeholder="金额" step="0.01" inputmode="decimal">
-          <input type="text" id="entryDesc" placeholder="说明">
-          <button id="entryBtn">记一笔</button>
-        </div>
-        <div class="cat-chips" id="catChips"></div>
-      </div>
-
-      <div class="grid2">
-        <div class="card">
-          <h3>📋 记录</h3>
-          <div class="record-list" id="recordList"></div>
-        </div>
-        <div class="card">
-          <h3>🥧 支出结构</h3>
-          <div id="catStats"></div>
-          <div style="margin-top:12px;text-align:center">
-            <button id="exportBtn" style="font-size:11px;padding:5px 10px;border:1px solid var(--accent);background:#fff;color:var(--accent);border-radius:8px;cursor:pointer">导出</button>
-            <button id="importBtn" style="font-size:11px;padding:5px 10px;border:1px solid var(--accent-2);background:#fff;color:var(--brown);border-radius:8px;cursor:pointer;margin-left:4px">导入</button>
-            <input type="file" id="importFile" accept=".json" style="display:none">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== 读书 ===== -->
-    <div class="page" id="page-read">
-      <div class="page-title">Reading Corner</div>
-      <div class="page-sub">免费在线阅读，不用下载不用转存</div>
-
-      <div class="card">
-        <h3>🔍 搜书</h3>
-        <div class="book-search">
-          <input type="text" id="bookSearch" placeholder="书名/作者，如《小狗钱钱》">
-          <button id="bookSearchBtn">搜索</button>
-        </div>
-        <div class="book-sites" id="bookSites">
-          <a class="book-site" data-url="https://www.zhihailib.com/"><div class="logo" style="background:#D98C6B">知</div><div class="info"><b>知海图书馆</b><small>免费中文电子书</small></div></a>
-          <a class="book-site" data-url="https://www.dushu.com/"><div class="logo" style="background:#7A9A6E">读</div><div class="info"><b>读书网</b><small>经典名著在线看</small></div></a>
-          <a class="book-site" data-url="https://yuedu.163.com/book/category"><div class="logo" style="background:#E8B84B">网</div><div class="info"><b>网易云阅读</b><small>小说/经管/文学</small></div></a>
-          <a class="book-site" data-url="https://www.jiumosearch.org/"><div class="logo" style="background:#6B8DB5">鸠</div><div class="info"><b>鸠摩搜书</b><small>搜到后下载</small></div></a>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>📖 在线阅读 <span style="font-size:12px;font-weight:400;color:var(--brown-2);margin-left:8px">点击上方书源即可在此阅读</span></h3>
-        <iframe class="book-frame" id="bookFrame" src="https://www.zhihailib.com/"></iframe>
-        <div class="book-tip">~ 部分网站可能限制嵌入，打不开时点右上角"在新窗口打开" ~</div>
-      </div>
-    </div>
-
-    <!-- ===== 热点 ===== -->
-    <div class="page" id="page-hot">
-      <div class="page-title">Hot & Trends</div>
-      <div class="page-sub">实时热点、财经资讯、商机风口</div>
-
-      <div class="hot-tabs" id="hotTabs">
-        <div class="tab active" data-src="36kr">36氪</div>
-        <div class="tab" data-src="hot">热搜</div>
-        <div class="tab" data-src="finance">财经</div>
-        <div class="tab" data-src="policy">政策</div>
-        <div class="tab" data-src="side">副业</div>
-      </div>
-      <div class="hot-list" id="hotList"></div>
-    </div>
-
-    <!-- ===== 英语 ===== -->
-    <div class="page" id="page-english">
-      <div class="page-title">English Zone</div>
-      <div class="page-sub">高考110到雅思流利，从这里开始</div>
-
-      <div class="card">
-        <h3>🎯 每日一词</h3>
-        <div class="word-card" id="wordCard">
-          <div class="word" id="wWord">abandon</div>
-          <div class="phonetic" id="wPhonetic">/əˈbændən/</div>
-          <div class="meaning" id="wMeaning">v. 放弃，抛弃</div>
-        </div>
-        <button id="nextWord" style="background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:600">换一个 →</button>
-      </div>
-
-      <div class="card">
-        <h3>📚 学习资源</h3>
-        <div class="eng-grid">
-          <a class="eng-card" data-url="https://www.bbc.com/learningenglish"><span class="emoji">📻</span><div class="et">BBC Learning English</div><div class="ed">听力/语法/词汇</div></a>
-          <a class="eng-card" data-url="https://ted.com/"><span class="emoji">🎤</span><div class="et">TED Talks</div><div class="ed">演讲听力+观点</div></a>
-          <a class="eng-card" data-url="https://dictionary.cambridge.org/"><span class="emoji">📕</span><div class="et">剑桥词典</div><div class="ed">查词/发音/例句</div></a>
-          <a class="eng-card" data-url="https://www.iciba.com/"><span class="emoji">📗</span><div class="et">爱词霸</div><div class="ed">中英互译</div></a>
-          <a class="eng-card" data-url="https://www.51voa.com/"><span class="emoji">📰</span><div class="et">VOA英语</div><div class="ed">慢速/常速新闻听力</div></a>
-          <a class="eng-card" data-url="https://www.economist.com/"><span class="emoji">💼</span><div class="et">经济学人</div><div class="ed">雅思阅读素材</div></a>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>📖 在线学习</h3>
-        <iframe class="eng-frame" id="engFrame" src="https://www.bbc.com/learningenglish"></iframe>
-      </div>
-    </div>
-
-    <!-- ===== 计划日历 ===== -->
-    <div class="page" id="page-plan">
-      <div class="page-title">Plan & Calendar</div>
-      <div class="page-sub">点击日期添加计划，完成打勾✅</div>
-
-      <div class="card">
-        <div class="cal-header">
-          <button id="prevMonth">‹ 上月</button>
-          <div class="month" id="calMonth">2025年7月</div>
-          <button id="nextMonth">下月 ›</button>
-        </div>
-        <div class="cal-grid" id="calWeeks">
-          <div class="cal-week">一</div><div class="cal-week">二</div><div class="cal-week">三</div>
-          <div class="cal-week">四</div><div class="cal-week">五</div><div class="cal-week">六</div><div class="cal-week">日</div>
-        </div>
-        <div class="cal-grid" id="calGrid" style="margin-top:6px"></div>
-      </div>
-
-      <div class="card">
-        <h3>💡 使用说明</h3>
-        <div style="font-size:13px;color:var(--brown-2);line-height:1.8">
-          • 点击任意日期格子里的 <b style="color:var(--accent)">+</b> 添加计划<br>
-          • 点击计划前的方框打勾 ✅ 标记完成<br>
-          • 数据自动保存在浏览器，换设备记得导出记账数据<br>
-          • 建议每天早上花 5 分钟规划当天计划
-        </div>
-      </div>
-    </div>
-
-  </div>
+  <div class="date" id="topDate"></div>
 </div>
 
-<div class="toast" id="toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--brown);color:#fff;padding:9px 18px;border-radius:22px;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:99"></div>
+<div class="sidebar-overlay" id="overlay"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-close" id="closeBtn">✕</div>
+    <div class="sidebar-avatar">搞</div>
+    <div class="sidebar-name">下课搞钱去</div>
+    <div class="sidebar-meta">大二 · 广东 · 慢慢变富</div>
+  </div>
+  <div class="nav-item active" data-page="money"><span class="icon">📒</span>记账</div>
+  <div class="nav-item" data-page="read"><span class="icon">📚</span>读书</div>
+  <div class="nav-item" data-page="hot"><span class="icon">🔥</span>热点资讯</div>
+  <div class="nav-item" data-page="english"><span class="icon">🔤</span>英语学习</div>
+  <div class="nav-item" data-page="plan"><span class="icon">📅</span>计划日历</div>
+  <div class="sidebar-footer">~ 每天进步一点点 ~</div>
+</div>
+
+<div class="main">
+
+  <div class="page active" id="page-money">
+    <div class="page-title">Account Book</div>
+    <div class="page-sub">每一笔都记，就知道钱去哪了</div>
+    <div class="grid3" style="margin-bottom:13px">
+      <div class="stat-box income"><div class="label">本月收入</div><div class="val" id="totalIn">¥0</div></div>
+      <div class="stat-box expense"><div class="label">本月支出</div><div class="val" id="totalOut">¥0</div></div>
+      <div class="stat-box balance"><div class="label">结余</div><div class="val" id="balance">¥0</div></div>
+    </div>
+    <div class="card">
+      <h3>✏️ 记一笔</h3>
+      <div class="entry-row">
+        <select id="entryType"><option value="expense">支出</option><option value="income">收入</option></select>
+        <input type="number" id="entryAmt" placeholder="金额" step="0.01" inputmode="decimal">
+        <input type="text" id="entryDesc" placeholder="说明">
+        <button id="entryBtn">记一笔</button>
+      </div>
+      <div class="cat-chips" id="catChips"></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><h3>📋 记录</h3><div class="record-list" id="recordList"></div></div>
+      <div class="card"><h3>🥧 支出结构</h3><div id="catStats"></div>
+        <div style="margin-top:10px;text-align:center">
+          <button id="exportBtn" style="font-size:11px;padding:5px 10px;border:1px solid var(--accent);background:#fff;color:var(--accent);border-radius:8px;cursor:pointer">导出</button>
+          <button id="importBtn" style="font-size:11px;padding:5px 10px;border:1px solid var(--accent-2);background:#fff;color:var(--brown);border-radius:8px;cursor:pointer;margin-left:4px">导入</button>
+          <input type="file" id="importFile" accept=".json" style="display:none">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-read">
+    <div class="page-title">Reading Corner</div>
+    <div class="page-sub">免费在线阅读，不用下载不用转存</div>
+    <div class="card">
+      <h3>🔍 搜书</h3>
+      <div class="book-search">
+        <input type="text" id="bookSearch" placeholder="书名/作者，如《小狗钱钱》">
+        <button id="bookSearchBtn">搜索</button>
+      </div>
+      <div class="book-sites" id="bookSites">
+        <a class="book-site" data-url="https://www.zhihailib.com/"><div class="logo" style="background:#D98C6B">知</div><div class="info"><b>知海图书馆</b><small>免费中文电子书</small></div></a>
+        <a class="book-site" data-url="https://www.dushu.com/"><div class="logo" style="background:#7A9A6E">读</div><div class="info"><b>读书网</b><small>经典名著在线看</small></div></a>
+        <a class="book-site" data-url="https://yuedu.163.com/book/category"><div class="logo" style="background:#E8B84B">网</div><div class="info"><b>网易云阅读</b><small>小说/经管/文学</small></div></a>
+        <a class="book-site" data-url="https://www.jiumosearch.org/"><div class="logo" style="background:#6B8DB5">鸠</div><div class="info"><b>鸠摩搜书</b><small>搜到后下载</small></div></a>
+      </div>
+    </div>
+    <div class="card">
+      <h3>📖 在线阅读 <span style="font-size:11px;font-weight:400;color:var(--brown-2);margin-left:6px">点上方书源即可在此阅读</span></h3>
+      <iframe class="book-frame" id="bookFrame" src="https://www.zhihailib.com/"></iframe>
+      <div class="book-tip">~ 部分网站可能限制嵌入，打不开时点右下角"在新窗口打开" ~</div>
+    </div>
+  </div>
+
+  <div class="page" id="page-hot">
+    <div class="page-title">Hot & Trends</div>
+    <div class="page-sub">实时热点、财经资讯、商机风口</div>
+    <div class="hot-tabs" id="hotTabs">
+      <div class="tab active" data-src="36kr">36氪</div>
+      <div class="tab" data-src="hot">热搜</div>
+      <div class="tab" data-src="finance">财经</div>
+      <div class="tab" data-src="policy">政策</div>
+      <div class="tab" data-src="side">副业</div>
+    </div>
+    <div class="hot-list" id="hotList"></div>
+  </div>
+
+  <div class="page" id="page-english">
+    <div class="page-title">English Zone</div>
+    <div class="page-sub">高考110到雅思流利，从这里开始</div>
+    <div class="card">
+      <h3>🎯 每日一词</h3>
+      <div class="word-card"><div class="word" id="wWord">abandon</div><div class="phonetic" id="wPhonetic">/əˈbændən/</div><div class="meaning" id="wMeaning">v. 放弃，抛弃</div></div>
+      <button id="nextWord" style="background:var(--accent);color:#fff;border:none;padding:8px 18px;border-radius:8px;cursor:pointer;font-weight:600">换一个 →</button>
+    </div>
+    <div class="card">
+      <h3>📚 学习资源</h3>
+      <div class="eng-grid">
+        <a class="eng-card" data-url="https://www.bbc.com/learningenglish"><span class="emoji">📻</span><div class="et">BBC Learning English</div><div class="ed">听力/语法/词汇</div></a>
+        <a class="eng-card" data-url="https://ted.com/"><span class="emoji">🎤</span><div class="et">TED Talks</div><div class="ed">演讲听力+观点</div></a>
+        <a class="eng-card" data-url="https://dictionary.cambridge.org/"><span class="emoji">📕</span><div class="et">剑桥词典</div><div class="ed">查词/发音/例句</div></a>
+        <a class="eng-card" data-url="https://www.iciba.com/"><span class="emoji">📗</span><div class="et">爱词霸</div><div class="ed">中英互译</div></a>
+        <a class="eng-card" data-url="https://www.51voa.com/"><span class="emoji">📰</span><div class="et">VOA英语</div><div class="ed">慢速/常速新闻听力</div></a>
+        <a class="eng-card" data-url="https://www.economist.com/"><span class="emoji">💼</span><div class="et">经济学人</div><div class="ed">雅思阅读素材</div></a>
+      </div>
+    </div>
+    <div class="card"><h3>📖 在线学习</h3><iframe class="eng-frame" id="engFrame" src="https://www.bbc.com/learningenglish"></iframe></div>
+  </div>
+
+  <div class="page" id="page-plan">
+    <div class="page-title">Plan & Calendar</div>
+    <div class="page-sub">点击日期添加计划，完成打勾✅</div>
+    <div class="card">
+      <div class="cal-header">
+        <button id="prevMonth">‹ 上月</button>
+        <div class="month" id="calMonth">2026年7月</div>
+        <button id="nextMonth">下月 ›</button>
+      </div>
+      <div class="cal-grid" id="calWeeks">
+        <div class="cal-week">一</div><div class="cal-week">二</div><div class="cal-week">三</div><div class="cal-week">四</div><div class="cal-week">五</div><div class="cal-week">六</div><div class="cal-week">日</div>
+      </div>
+      <div class="cal-grid" id="calGrid" style="margin-top:5px"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
-function toast(m){const t=$('#toast');t.textContent=m;t.style.opacity='1';clearTimeout(t._tm);t._tm=setTimeout(()=>t.style.opacity='0',1500);}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),1500);}
+const now=new Date();
+const days=['日','一','二','三','四','五','六'];
+$('#topDate').textContent=`${now.getMonth()+1}月${now.getDate()}日 周${days[now.getDay()]}`;
 
-// ===== 侧边栏切换 =====
+// 侧边栏
+function openSidebar(){$('#sidebar').classList.add('show');$('#overlay').classList.add('show');}
+function closeSidebar(){$('#sidebar').classList.remove('show');$('#overlay').classList.remove('show');}
+$('#menuBtn').onclick=openSidebar;
+$('#closeBtn').onclick=closeSidebar;
+$('#overlay').onclick=closeSidebar;
+
+// 页面切换
 $$('.nav-item').forEach(item=>{
   item.onclick=()=>{
     $$('.nav-item').forEach(x=>x.classList.remove('active'));
     $$('.page').forEach(x=>x.classList.remove('active'));
     item.classList.add('active');
     $('#page-'+item.dataset.page).classList.add('active');
+    closeSidebar();
   };
 });
 
-// ===== 记账 =====
-const CATS={
-  expense:[{key:'food',name:'餐饮',e:'🍚'},{key:'snack',name:'零食奶茶',e:'🧋'},{key:'transport',name:'交通',e:'🚌'},{key:'shop',name:'购物',e:'🛍️'},{key:'study',name:'学习',e:'📚'},{key:'social',name:'社交',e:'🎉'},{key:'life',name:'生活',e:'🧴'},{key:'other',name:'其他',e:'✏️'}],
-  income:[{key:'salary',name:'兼职',e:'💼'},{key:'scholar',name:'奖学金',e:'🏆'},{key:'redpacket',name:'红包',e:'🧧'},{key:'invest',name:'理财',e:'📈'},{key:'other',name:'其他',e:'✨'}]
-};
+// 记账
+const CATS={expense:[{key:'food',name:'餐饮',e:'🍚'},{key:'snack',name:'零食奶茶',e:'🧋'},{key:'transport',name:'交通',e:'🚌'},{key:'shop',name:'购物',e:'🛍️'},{key:'study',name:'学习',e:'📚'},{key:'social',name:'社交',e:'🎉'},{key:'life',name:'生活',e:'🧴'},{key:'other',name:'其他',e:'✏️'}],income:[{key:'salary',name:'兼职',e:'💼'},{key:'scholar',name:'奖学金',e:'🏆'},{key:'redpacket',name:'红包',e:'🧧'},{key:'invest',name:'理财',e:'📈'},{key:'other',name:'其他',e:'✨'}]};
 let curType='expense',curCat='food';
 function renderChips(){const w=$('#catChips');w.innerHTML='';CATS[curType].forEach(c=>{const el=document.createElement('div');el.className='chip'+(c.key===curCat?' active':'');el.textContent=c.e+c.name;el.onclick=()=>{curCat=c.key;renderChips();};w.appendChild(el);});}
 $('#entryType').onchange=e=>{curType=e.target.value;curCat=CATS[curType][0].key;renderChips();};
@@ -319,19 +296,16 @@ let records=[];try{records=JSON.parse(localStorage.getItem(KEY))||[];}catch{}
 function save(){localStorage.setItem(KEY,JSON.stringify(records));}
 function catE(t,k){return(CATS[t].find(c=>c.key===k)||{}).e||'✏️';}
 function catN(t,k){return(CATS[t].find(c=>c.key===k)||{}).name||'其他';}
-const now=new Date();
 function isMonth(r){const d=new Date(r.time);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth();}
 function renderMoney(){
   const mr=records.filter(isMonth);let in_=0,out=0;
   mr.forEach(r=>r.type==='income'?in_+=r.amt:out+=r.amt);
-  $('#totalIn').textContent='¥'+in_.toFixed(2);
-  $('#totalOut').textContent='¥'+out.toFixed(2);
-  $('#balance').textContent='¥'+(in_-out).toFixed(2);
+  $('#totalIn').textContent='¥'+in_.toFixed(2);$('#totalOut').textContent='¥'+out.toFixed(2);$('#balance').textContent='¥'+(in_-out).toFixed(2);
   const cm={};mr.filter(r=>r.type==='expense').forEach(r=>cm[r.cat]=(cm[r.cat]||0)+r.amt);
   const total=out||1,sorted=Object.entries(cm).sort((a,b)=>b[1]-a[1]);
-  $('#catStats').innerHTML=sorted.length?sorted.map(([k,v])=>`<div class="cat-bar"><span>${catE('expense',k)} ${catN('expense',k)}</span><div class="bar"><i style="width:${(v/total*100).toFixed(0)}%"></i></div><span style="color:var(--red);font-weight:700">¥${v.toFixed(0)}</span></div>`).join(''):'<div style="color:var(--brown-2);text-align:center;padding:20px">本月暂无支出</div>';
+  $('#catStats').innerHTML=sorted.length?sorted.map(([k,v])=>`<div class="cat-bar"><span>${catE('expense',k)} ${catN('expense',k)}</span><div class="bar"><i style="width:${(v/total*100).toFixed(0)}%"></i></div><span style="color:var(--red);font-weight:700">¥${v.toFixed(0)}</span></div>`).join(''):'<div style="color:var(--brown-2);text-align:center;padding:16px;font-size:12px">本月暂无支出</div>';
   const rl=$('#recordList');
-  if(!records.length){rl.innerHTML='<div style="text-align:center;padding:20px;color:var(--brown-2)">还没有记录</div>';return;}
+  if(!records.length){rl.innerHTML='<div style="text-align:center;padding:16px;color:var(--brown-2);font-size:12px">还没有记录</div>';return;}
   rl.innerHTML=[...records].sort((a,b)=>b.time-a.time).map(r=>{const d=new Date(r.time);return `<div class="record"><div class="emoji">${catE(r.type,r.cat)}</div><div>${r.desc||catN(r.type,r.cat)}<br><small style="color:var(--brown-2);font-size:10px">${d.getMonth()+1}/${d.getDate()} ${catN(r.type,r.cat)}</small></div><div class="amt ${r.type==='income'?'inc':'exp'}">${r.type==='income'?'+':'-'}¥${r.amt.toFixed(2)}</div><div class="del" data-i="${records.indexOf(r)}">✕</div></div>`;}).join('');
   $$('.record .del').forEach(el=>el.onclick=()=>{records.splice(+el.dataset.i,1);save();renderMoney();});
 }
@@ -341,53 +315,26 @@ $('#importBtn').onclick=()=>$('#importFile').click();
 $('#importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{records=JSON.parse(r.result);save();renderMoney();toast('导入成功');}catch{toast('格式错误');}};r.readAsText(f);};
 renderChips();renderMoney();
 
-// ===== 读书 =====
-$$('.book-site').forEach(s=>s.onclick=e=>{e.preventDefault();$('#bookFrame').src=s.dataset.url;});
-$('#bookSearchBtn').onclick=()=>{const q=$('#bookSearch').value.trim();if(!q){toast('请输入书名');return;}$('#bookFrame').src='https://www.zhihailib.com/search?q='+encodeURIComponent(q);};
+// 读书
+$$('.book-site').forEach(s=>s.onclick=e=>{e.preventDefault();$('#bookFrame').src=s.dataset.url;toast('已切换书源');});
+$('#bookSearchBtn').onclick=()=>{const q=$('#bookSearch').value.trim();if(!q){toast('请输入书名');return;}$('#bookFrame').src='https://www.zhihailib.com/search?q='+encodeURIComponent(q);toast('搜索中...');};
 $('#bookSearch').addEventListener('keydown',e=>{if(e.key==='Enter')$('#bookSearchBtn').click();});
 
-// ===== 热点 =====
-const HOT={
-  '36kr':{type:'iframe',url:'https://36kr.com/'},
-  'hot':{type:'links',data:[{t:'微博热搜',u:'https://s.weibo.com/top/summary',b:1},{t:'知乎热榜',u:'https://www.zhihu.com/hot',b:1},{t:'B站热搜',u:'https://www.bilibili.com/v/popular/rank/all'},{t:'百度热搜',u:'https://top.baidu.com/board?tab=realtime',b:1},{t:'抖音热点',u:'https://www.douyin.com/hot'},{t:'今日头条',u:'https://www.toutiao.com/'}]},
-  'finance':{type:'links',data:[{t:'36氪',u:'https://36kr.com/',b:1,d:'创投/风口'},{t:'虎嗅',u:'https://www.huxiu.com/',d:'商业评论'},{t:'钛媒体',u:'https://www.tmtpost.com/',d:'科技财经'},{t:'华尔街见闻',u:'https://wallstreetcn.com/',b:1,d:'全球市场'},{t:'雪球',u:'https://xueqiu.com/',d:'投资社区'},{t:'东方财富',u:'https://www.eastmoney.com/',d:'行情数据'}]},
-  'policy':{type:'links',data:[{t:'中国人民银行',u:'http://www.pbc.gov.cn/',d:'货币政策',b:1},{t:'国家统计局',u:'http://www.stats.gov.cn/',d:'经济数据'},{t:'发改委',u:'https://www.ndrc.gov.cn/',d:'产业政策'},{t:'中国政府网',u:'https://www.gov.cn/',d:'政策发布'},{t:'财政部',u:'http://www.mof.gov.cn/',d:'财政/税收'},{t:'证监会',u:'http://www.csrc.gov.cn/',d:'资本市场'}]},
-  'side':{type:'links',data:[{t:'什么值得买',u:'https://www.smzdm.com/',d:'信息差',b:1},{t:'闲鱼',u:'https://www.goofish.com/',d:'二手转卖'},{t:'小红书创作',u:'https://creator.xiaohongshu.com/',d:'内容变现'},{t:'B站创作',u:'https://member.bilibili.com/',d:'视频up主'},{t:'电鸭社区',u:'https://eleduck.com/',d:'远程兼职',b:1},{t:'圆领',u:'https://www.yuanling.com/',d:'远程工作'}]},
-};
-function loadHot(src){const l=$('#hotList'),cfg=HOT[src];if(!cfg)return;if(cfg.type==='iframe'){l.innerHTML=`<iframe style="width:100%;height:440px;border:1px solid var(--line);border-radius:10px" src="${cfg.url}"></iframe><div style="text-align:center;margin-top:8px;font-size:12px;color:var(--brown-2)">打不开？<a href="${cfg.url}" target="_blank" style="color:var(--accent)">点这里</a> 直接访问</div>`;}else{l.innerHTML=cfg.data.map(d=>`<a class="hot-item" href="${d.u}" target="_blank"><div class="ht">${d.t} ${d.b?'<span class="badge">热</span>':''}</div><div class="hm">${d.d||'点击直达'} ↗</div></a>`).join('');}}
+// 热点
+const HOT={'36kr':{type:'iframe',url:'https://36kr.com/'},'hot':{type:'links',data:[{t:'微博热搜',u:'https://s.weibo.com/top/summary',b:1},{t:'知乎热榜',u:'https://www.zhihu.com/hot',b:1},{t:'B站热搜',u:'https://www.bilibili.com/v/popular/rank/all'},{t:'百度热搜',u:'https://top.baidu.com/board?tab=realtime',b:1},{t:'抖音热点',u:'https://www.douyin.com/hot'},{t:'今日头条',u:'https://www.toutiao.com/'}]},'finance':{type:'links',data:[{t:'36氪',u:'https://36kr.com/',b:1,d:'创投/风口'},{t:'虎嗅',u:'https://www.huxiu.com/',d:'商业评论'},{t:'钛媒体',u:'https://www.tmtpost.com/',d:'科技财经'},{t:'华尔街见闻',u:'https://wallstreetcn.com/',b:1,d:'全球市场'},{t:'雪球',u:'https://xueqiu.com/',d:'投资社区'},{t:'东方财富',u:'https://www.eastmoney.com/',d:'行情数据'}]},'policy':{type:'links',data:[{t:'中国人民银行',u:'http://www.pbc.gov.cn/',d:'货币政策',b:1},{t:'国家统计局',u:'http://www.stats.gov.cn/',d:'经济数据'},{t:'发改委',u:'https://www.ndrc.gov.cn/',d:'产业政策'},{t:'中国政府网',u:'https://www.gov.cn/',d:'政策发布'},{t:'财政部',u:'http://www.mof.gov.cn/',d:'财政/税收'},{t:'证监会',u:'http://www.csrc.gov.cn/',d:'资本市场'}]},'side':{type:'links',data:[{t:'什么值得买',u:'https://www.smzdm.com/',d:'信息差',b:1},{t:'闲鱼',u:'https://www.goofish.com/',d:'二手转卖'},{t:'小红书创作',u:'https://creator.xiaohongshu.com/',d:'内容变现'},{t:'B站创作',u:'https://member.bilibili.com/',d:'视频up主'},{t:'电鸭社区',u:'https://eleduck.com/',d:'远程兼职',b:1},{t:'圆领',u:'https://www.yuanling.com/',d:'远程工作'}]}};
+function loadHot(src){const l=$('#hotList'),cfg=HOT[src];if(!cfg)return;if(cfg.type==='iframe'){l.innerHTML=`<iframe style="width:100%;height:420px;border:1px solid var(--line);border-radius:10px" src="${cfg.url}"></iframe><div style="text-align:center;margin-top:8px;font-size:11px;color:var(--brown-2)">打不开？<a href="${cfg.url}" target="_blank" style="color:var(--accent)">点这里</a> 直接访问</div>`;}else{l.innerHTML=cfg.data.map(d=>`<a class="hot-item" href="${d.u}" target="_blank"><div class="ht">${d.t} ${d.b?'<span class="badge">热</span>':''}</div><div class="hm">${d.d||'点击直达'} ↗</div></a>`).join('');}}
 $$('.hot-tabs .tab').forEach(t=>t.onclick=()=>{$$('.hot-tabs .tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');loadHot(t.dataset.src);});
 loadHot('36kr');
 
-// ===== 英语 =====
-const WORDS=[
-  {w:'abandon',p:'/əˈbændən/',m:'v. 放弃，抛弃'},
-  {w:'benefit',p:'/ˈbenɪfɪt/',m:'n. 好处，利益 v. 获益'},
-  {w:'contribute',p:'/kənˈtrɪbjuːt/',m:'v. 贡献，捐献'},
-  {w:'diligent',p:'/ˈdɪlɪdʒənt/',m:'adj. 勤奋的'},
-  {w:'enhance',p:'/ɪnˈhɑːns/',m:'v. 提高，增强'},
-  {w:'fluctuate',p:'/ˈflʌktʃueɪt/',m:'v. 波动，起伏'},
-  {w:'genuine',p:'/ˈdʒenjuɪn/',m:'adj. 真正的，真诚的'},
-  {w:'horizon',p:'/həˈraɪzn/',m:'n. 地平线，视野'},
-  {w:'invest',p:'/ɪnˈvest/',m:'v. 投资，投入'},
-  {w:'journal',p:'/ˈdʒɜːnl/',m:'n. 日记，期刊'},
-  {w:'leverage',p:'/ˈliːvərɪdʒ/',m:'n. 杠杆，影响力'},
-  {w:'momentum',p:'/məˈmentəm/',m:'n. 动力，势头'},
-  {w:'negotiate',p:'/nɪˈɡəʊʃieɪt/',m:'v. 谈判，协商'},
-  {w:'opportunity',p:'/ˌɒpəˈtjuːnəti/',m:'n. 机会，时机'},
-  {w:'persistent',p:'/pəˈsɪstənt/',m:'adj. 坚持不懈的'},
-  {w:'quantify',p:'/ˈkwɒntɪfaɪ/',m:'v. 量化，定量'},
-  {w:'resilient',p:'/rɪˈzɪliənt/',m:'adj. 有韧性的，能恢复的'},
-  {w:'strategy',p:'/ˈstrætədʒi/',m:'n. 策略，战略'},
-  {w:'threshold',p:'/ˈθreʃhəʊld/',m:'n. 门槛，临界点'},
-  {w:'ultimate',p:'/ˈʌltɪmət/',m:'adj. 最终的，极限的'},
-];
+// 英语
+const WORDS=[{w:'abandon',p:'/əˈbændən/',m:'v. 放弃，抛弃'},{w:'benefit',p:'/ˈbenɪfɪt/',m:'n. 好处 v. 获益'},{w:'contribute',p:'/kənˈtrɪbjuːt/',m:'v. 贡献，捐献'},{w:'diligent',p:'/ˈdɪlɪdʒənt/',m:'adj. 勤奋的'},{w:'enhance',p:'/ɪnˈhɑːns/',m:'v. 提高，增强'},{w:'fluctuate',p:'/ˈflʌktʃueɪt/',m:'v. 波动，起伏'},{w:'genuine',p:'/ˈdʒenjuɪn/',m:'adj. 真正的'},{w:'horizon',p:'/həˈraɪzn/',m:'n. 地平线，视野'},{w:'invest',p:'/ɪnˈvest/',m:'v. 投资，投入'},{w:'journal',p:'/ˈdʒɜːnl/',m:'n. 日记，期刊'},{w:'leverage',p:'/ˈliːvərɪdʒ/',m:'n. 杠杆，影响力'},{w:'momentum',p:'/məˈmentəm/',m:'n. 动力，势头'},{w:'negotiate',p:'/nɪˈɡəʊʃieɪt/',m:'v. 谈判，协商'},{w:'opportunity',p:'/ˌɒpəˈtjuːnəti/',m:'n. 机会，时机'},{w:'persistent',p:'/pəˈsɪstənt/',m:'adj. 坚持的'},{w:'quantify',p:'/ˈkwɒntɪfaɪ/',m:'v. 量化'},{w:'resilient',p:'/rɪˈzɪliənt/',m:'adj. 有韧性的'},{w:'strategy',p:'/ˈstrætədʒi/',m:'n. 策略，战略'},{w:'threshold',p:'/ˈθreʃhəʊld/',m:'n. 门槛，临界点'},{w:'ultimate',p:'/ˈʌltɪmət/',m:'adj. 最终的'}];
 let wordIdx=0;
 function showWord(){const w=WORDS[wordIdx%WORDS.length];$('#wWord').textContent=w.w;$('#wPhonetic').textContent=w.p;$('#wMeaning').textContent=w.m;wordIdx++;}
 showWord();
 $('#nextWord').onclick=showWord;
 $$('.eng-card').forEach(c=>c.onclick=e=>{e.preventDefault();$('#engFrame').src=c.dataset.url;});
 
-// ===== 计划日历 =====
+// 日历
 const PLAN_KEY='workbench_pro_plans';
 let plans={};try{plans=JSON.parse(localStorage.getItem(PLAN_KEY))||{};}catch{}
 function savePlans(){localStorage.setItem(PLAN_KEY,JSON.stringify(plans));}
@@ -395,46 +342,23 @@ let calDate=new Date(now.getFullYear(),now.getMonth(),1);
 function renderCal(){
   const y=calDate.getFullYear(),m=calDate.getMonth();
   $('#calMonth').textContent=`${y}年${m+1}月`;
-  const first=new Date(y,m,1);
-  let startDay=first.getDay();if(startDay===0)startDay=7;startDay--;
+  const first=new Date(y,m,1);let startDay=first.getDay();if(startDay===0)startDay=7;startDay--;
   const daysInMonth=new Date(y,m+1,0).getDate();
   const grid=$('#calGrid');grid.innerHTML='';
-  // 上月填充
   const prevDays=new Date(y,m,0).getDate();
-  for(let i=startDay-1;i>=0;i--){
-    grid.innerHTML+=`<div class="cal-day other"><div class="num">${prevDays-i}</div></div>`;
-  }
-  // 本月
+  for(let i=startDay-1;i>=0;i--)grid.innerHTML+=`<div class="cal-day other"><div class="num">${prevDays-i}</div></div>`;
   const today=new Date();
   for(let d=1;d<=daysInMonth;d++){
     const dateKey=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const isToday=d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
     let tasksHtml='';
-    if(plans[dateKey]){
-      tasksHtml=plans[dateKey].map((t,i)=>`<div class="cal-task ${t.done?'done':''}" data-date="${dateKey}" data-i="${i}"><span class="check">${t.done?'✅':'⬜'}</span>${t.text}</div>`).join('');
-    }
+    if(plans[dateKey])tasksHtml=plans[dateKey].map((t,i)=>`<div class="cal-task ${t.done?'done':''}" data-date="${dateKey}" data-i="${i}"><span>${t.done?'✅':'⬜'}</span>${t.text}</div>`).join('');
     grid.innerHTML+=`<div class="cal-day ${isToday?'today':''}"><div class="num">${d}</div>${tasksHtml}<div class="cal-add" data-date="${dateKey}">+</div></div>`;
   }
-  // 下月填充
-  const total=startDay+daysInMonth;
-  const remain=(7-total%7)%7;
-  for(let i=1;i<=remain;i++){
-    grid.innerHTML+=`<div class="cal-day other"><div class="num">${i}</div></div>`;
-  }
-  // 绑定事件
-  $$('.cal-add').forEach(el=>el.onclick=()=>{
-    const dk=el.dataset.date;
-    const text=prompt('添加计划：');
-    if(!text)return;
-    if(!plans[dk])plans[dk]=[];
-    plans[dk].push({text,done:false});
-    savePlans();renderCal();toast('已添加');
-  });
-  $$('.cal-task').forEach(el=>el.onclick=()=>{
-    const dk=el.dataset.date,i=+el.dataset.i;
-    plans[dk][i].done=!plans[dk][i].done;
-    savePlans();renderCal();
-  });
+  const total=startDay+daysInMonth;const remain=(7-total%7)%7;
+  for(let i=1;i<=remain;i++)grid.innerHTML+=`<div class="cal-day other"><div class="num">${i}</div></div>`;
+  $$('.cal-add').forEach(el=>el.onclick=()=>{const dk=el.dataset.date;const text=prompt('添加计划：');if(!text)return;if(!plans[dk])plans[dk]=[];plans[dk].push({text,done:false});savePlans();renderCal();toast('已添加');});
+  $$('.cal-task').forEach(el=>el.onclick=()=>{const dk=el.dataset.date,i=+el.dataset.i;plans[dk][i].done=!plans[dk][i].done;savePlans();renderCal();});
 }
 $('#prevMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()-1);renderCal();};
 $('#nextMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderCal();};
