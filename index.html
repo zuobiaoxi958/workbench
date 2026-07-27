@@ -79,14 +79,21 @@ html,body{min-height:100%;font-family:'Noto Sans SC',-apple-system,sans-serif;co
 .book-search{display:flex;gap:7px;margin-bottom:11px}
 .book-search input{flex:1;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:13px;outline:none}
 .book-search button{padding:9px 15px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600}
+.book-group-title{font-size:12px;color:var(--brown-2);margin:10px 0 7px;font-weight:600}
 .book-sites{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:11px}
 .book-site{display:flex;align-items:center;gap:9px;padding:10px;border-radius:10px;background:var(--cream);text-decoration:none;color:var(--ink);font-size:12px;border:1px solid transparent;cursor:pointer}
 .book-site:hover{border-color:var(--accent)}
+.book-site.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.book-site.active .info small{color:rgba(255,255,255,.8)}
 .book-site .logo{width:27px;height:27px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0}
 .book-site .info b{display:block;font-size:12px}
 .book-site .info small{color:var(--brown-2);font-size:10px}
-.book-frame{width:100%;height:400px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.book-tip{font-size:11px;color:var(--brown-2);text-align:center;margin-top:6px;font-family:'Caveat';font-size:13px}
+.book-frame{width:100%;height:360px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.book-actions{display:flex;gap:8px;margin-top:10px}
+.book-actions button{flex:1;padding:9px 0;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;border:none}
+.book-actions .btn-outline{background:#fff;border:1px solid var(--accent);color:var(--accent)}
+.book-actions .btn-primary{background:var(--accent);color:#fff}
+.book-tip{font-size:11px;color:var(--brown-2);text-align:center;margin-top:8px;font-family:'Caveat';font-size:13px}
 
 .hot-tabs{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
 .hot-tabs .tab{font-size:12px;padding:5px 11px;border-radius:12px;background:var(--cream);color:var(--brown);cursor:pointer;border:1px solid transparent}
@@ -175,24 +182,36 @@ html,body{min-height:100%;font-family:'Noto Sans SC',-apple-system,sans-serif;co
 
   <div class="page" id="page-read">
     <div class="page-title">Reading Corner</div>
-    <div class="page-sub">免费在线阅读，不用下载不用转存</div>
+    <div class="page-sub">正版在线阅读 + 资源搜索，爱怎么看就怎么看</div>
     <div class="card">
       <h3>🔍 搜书</h3>
       <div class="book-search">
-        <input type="text" id="bookSearch" placeholder="书名/作者，如《小狗钱钱》">
+        <input type="text" id="bookSearch" placeholder="书名/作者，如《小狗钱钱》《活着》">
         <button id="bookSearchBtn">搜索</button>
       </div>
-      <div class="book-sites" id="bookSites">
-        <a class="book-site" data-url="https://www.zhihailib.com/"><div class="logo" style="background:#D98C6B">知</div><div class="info"><b>知海图书馆</b><small>免费中文电子书</small></div></a>
-        <a class="book-site" data-url="https://www.dushu.com/"><div class="logo" style="background:#7A9A6E">读</div><div class="info"><b>读书网</b><small>经典名著在线看</small></div></a>
-        <a class="book-site" data-url="https://yuedu.163.com/book/category"><div class="logo" style="background:#E8B84B">网</div><div class="info"><b>网易云阅读</b><small>小说/经管/文学</small></div></a>
-        <a class="book-site" data-url="https://www.jiumosearch.org/"><div class="logo" style="background:#6B8DB5">鸠</div><div class="info"><b>鸠摩搜书</b><small>搜到后下载</small></div></a>
+      <div class="book-group-title">📖 正版在线阅读（推荐）</div>
+      <div class="book-sites" id="bookSitesOnline">
+        <a class="book-site active" data-key="weread" data-url="https://weread.qq.com/web/" data-search="https://weread.qq.com/web/search/search?key={q}"><div class="logo" style="background:#3E8C59">微</div><div class="info"><b>微信读书</b><small>正版书多，网页直接看</small></div></a>
+        <a class="book-site" data-key="douban" data-url="https://read.douban.com/" data-search="https://read.douban.com/search?q={q}"><div class="logo" style="background:#006600">豆</div><div class="info"><b>豆瓣阅读</b><small>文学/经管/小说</small></div></a>
+        <a class="book-site" data-key="snail" data-url="https://du.163.com/" data-search="https://du.163.com/search?keyword={q}"><div class="logo" style="background:#E8B84B">蜗</div><div class="info"><b>网易蜗牛</b><small>每天免费1小时</small></div></a>
+        <a class="book-site" data-key="fanqie" data-url="https://fanqienovel.com/" data-search="https://fanqienovel.com/page/search?query={q}"><div class="logo" style="background:#FF6A00">番</div><div class="info"><b>番茄小说</b><small>免费网文，网页可看</small></div></a>
+        <a class="book-site" data-key="qimao" data-url="https://www.qimao.com/" data-search="https://www.qimao.com/search/?keyword={q}"><div class="logo" style="background:#D98C6B">七</div><div class="info"><b>七猫小说</b><small>免费小说大全</small></div></a>
+        <a class="book-site" data-key="gutenberg" data-url="https://www.gutenberg.org/" data-search="https://www.gutenberg.org/ebooks/search/?query={q}"><div class="logo" style="background:#7A9A6E">G</div><div class="info"><b>古登堡</b><small>英文经典免费公版书</small></div></a>
+      </div>
+      <div class="book-group-title">🔧 找书资源（部分需下载）</div>
+      <div class="book-sites" id="bookSitesDownload">
+        <a class="book-site" data-key="jiumo" data-url="https://www.jiumosearch.org/" data-search="https://www.jiumosearch.org/search?keyword={q}"><div class="logo" style="background:#6B8DB5">鸠</div><div class="info"><b>鸠摩搜书</b><small>全网电子书资源</small></div></a>
+        <a class="book-site" data-key="zhihai" data-url="https://www.zhihailib.com/" data-search="https://www.zhihailib.com/search?q={q}"><div class="logo" style="background:#8B7355">知</div><div class="info"><b>知海图书馆</b><small>网盘资源聚合</small></div></a>
       </div>
     </div>
     <div class="card">
-      <h3>📖 在线阅读 <span style="font-size:11px;font-weight:400;color:var(--brown-2);margin-left:6px">点上方书源即可在此阅读</span></h3>
-      <iframe class="book-frame" id="bookFrame" src="https://www.zhihailib.com/"></iframe>
-      <div class="book-tip">~ 部分网站可能限制嵌入，打不开时点右下角"在新窗口打开" ~</div>
+      <h3>📺 预览 <span id="currentBookSite" style="font-size:11px;font-weight:400;color:var(--brown-2);margin-left:6px">微信读书</span></h3>
+      <iframe class="book-frame" id="bookFrame" src="https://weread.qq.com/web/"></iframe>
+      <div class="book-actions">
+        <button id="openBookNew" class="btn-outline">↗ 新窗口打开</button>
+        <button id="searchBookNew" class="btn-primary">🔍 用当前书源搜索这本书</button>
+      </div>
+      <div class="book-tip">~ 微信读书/豆瓣等建议点"新窗口打开"，体验更完整 ~</div>
     </div>
   </div>
 
@@ -290,9 +309,14 @@ $('#importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new
 renderChips();renderMoney();
 
 // 读书
-$$('.book-site').forEach(s=>s.onclick=e=>{e.preventDefault();$('#bookFrame').src=s.dataset.url;toast('已切换书源');});
-$('#bookSearchBtn').onclick=()=>{const q=$('#bookSearch').value.trim();if(!q){toast('请输入书名');return;}$('#bookFrame').src='https://www.zhihailib.com/search?q='+encodeURIComponent(q);toast('搜索中...');};
+let currentBookSite=$('#bookSitesOnline .book-site.active')||$('#bookSitesOnline .book-site');
+function getBookUrl(site,search){const q=$('#bookSearch').value.trim();if(search&&q){return site.dataset.search.replace('{q}',encodeURIComponent(q));}return site.dataset.url;}
+function updateBookUI(site){currentBookSite=site;$$('.book-site').forEach(x=>x.classList.remove('active'));site.classList.add('active');$('#currentBookSite').textContent=site.querySelector('.info b').textContent;$('#bookFrame').src=getBookUrl(site,false);toast('已切换：'+site.querySelector('.info b').textContent);}
+$$('.book-site').forEach(s=>s.onclick=e=>{e.preventDefault();updateBookUI(s);});
+$('#bookSearchBtn').onclick=()=>{const q=$('#bookSearch').value.trim();if(!q){toast('请输入书名');return;}$('#bookFrame').src=getBookUrl(currentBookSite,true);toast('搜索中...');};
 $('#bookSearch').addEventListener('keydown',e=>{if(e.key==='Enter')$('#bookSearchBtn').click();});
+$('#openBookNew').onclick=()=>window.open(getBookUrl(currentBookSite,false),'_blank');
+$('#searchBookNew').onclick=()=>{const q=$('#bookSearch').value.trim();if(!q){toast('请输入书名');return;}window.open(getBookUrl(currentBookSite,true),'_blank');};
 
 // 热点
 const HOT={'36kr':{type:'iframe',url:'https://36kr.com/'},'hot':{type:'links',data:[{t:'微博热搜',u:'https://s.weibo.com/top/summary',b:1},{t:'知乎热榜',u:'https://www.zhihu.com/hot',b:1},{t:'B站热搜',u:'https://www.bilibili.com/v/popular/rank/all'},{t:'百度热搜',u:'https://top.baidu.com/board?tab=realtime',b:1},{t:'抖音热点',u:'https://www.douyin.com/hot'},{t:'今日头条',u:'https://www.toutiao.com/'}]},'finance':{type:'links',data:[{t:'36氪',u:'https://36kr.com/',b:1,d:'创投/风口'},{t:'虎嗅',u:'https://www.huxiu.com/',d:'商业评论'},{t:'钛媒体',u:'https://www.tmtpost.com/',d:'科技财经'},{t:'华尔街见闻',u:'https://wallstreetcn.com/',b:1,d:'全球市场'},{t:'雪球',u:'https://xueqiu.com/',d:'投资社区'},{t:'东方财富',u:'https://www.eastmoney.com/',d:'行情数据'}]},'policy':{type:'links',data:[{t:'中国人民银行',u:'http://www.pbc.gov.cn/',d:'货币政策',b:1},{t:'国家统计局',u:'http://www.stats.gov.cn/',d:'经济数据'},{t:'发改委',u:'https://www.ndrc.gov.cn/',d:'产业政策'},{t:'中国政府网',u:'https://www.gov.cn/',d:'政策发布'},{t:'财政部',u:'http://www.mof.gov.cn/',d:'财政/税收'},{t:'证监会',u:'http://www.csrc.gov.cn/',d:'资本市场'}]},'side':{type:'links',data:[{t:'什么值得买',u:'https://www.smzdm.com/',d:'信息差',b:1},{t:'闲鱼',u:'https://www.goofish.com/',d:'二手转卖'},{t:'小红书创作',u:'https://creator.xiaohongshu.com/',d:'内容变现'},{t:'B站创作',u:'https://member.bilibili.com/',d:'视频up主'},{t:'电鸭社区',u:'https://eleduck.com/',d:'远程兼职',b:1},{t:'圆领',u:'https://www.yuanling.com/',d:'远程工作'}]}};
